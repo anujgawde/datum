@@ -1,0 +1,31 @@
+# C# / .NET
+bin/
+obj/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+*.dll
+*.exe
+*.pdb
+
+# Node / TypeScript
+node_modules/
+dist/
+.next/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# macOS
+.DS_Store
+
+# Rhino
+*.3dm
+
+# Local extras (claude.md, notes, etc.)
+extras/
