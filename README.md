@@ -30,7 +30,7 @@ An agentic CAD compliance tool that reads structural specification documents, in
 ## Project Structure
 
 ```
-plugin/       C# RhinoCommon plugin (Rhino 8, .NET 7)
+plugin/       C# RhinoCommon plugin (Rhino 8, .NET 8)
 server/       TypeScript primary server
   rag/        Requirement-extraction pipeline
   agent/      Agent orchestration service
@@ -43,7 +43,7 @@ docs/         Architecture notes and diagrams
 
 ## Building the Plugin
 
-Requires .NET 7 SDK.
+Requires .NET 8 SDK.
 
 ```bash
 cd plugin

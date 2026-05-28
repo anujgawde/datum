@@ -8,7 +8,7 @@ namespace Datum
     {
         public override string EnglishName => "DatumListObjects";
 
-        protected override Result RunCommand(RhinoDoc doc, RunCommandArgs args)
+        protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
             var objects = doc.Objects;
 
