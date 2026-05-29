@@ -8,6 +8,7 @@
     "migrate": "tsx db/migrate.ts",
     "extract": "tsx rag/cli.ts",
     "check": "tsx check/cli.ts",
+    "agent": "tsx agent/cli.ts",
     "make-fixture": "tsx fixtures/make-pdf.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"

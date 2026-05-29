@@ -84,6 +84,20 @@ npm run check -- path/to/model.datum.json --requirements path/to/requirements.js
 The report is printed as a summary and written to `<model>.report.json` next to the
 snapshot.
 
+### Agentic checking
+
+The same check can run agentically: instead of fixed rules, an LLM reasons through each
+requirement, deciding which objects and measurements apply and calling the same underlying
+tools. It emits a step-by-step trace of its decisions alongside the report.
+
+```bash
+npm run agent path/to/model.datum.json
+```
+
+This prints a per-requirement trace and writes `<model>.report.json` and
+`<model>.trace.json`. It requires Ollama running (see prerequisites above); the
+`--requirements` override works here too.
+
 ## Project Structure
 
 ```
@@ -95,6 +109,7 @@ server/       TypeScript primary server
   llm/        LLM provider abstraction
   db/         PostgreSQL schema and client
   check/      Deterministic compliance checker
+  agent/      Agentic compliance checker
 docs/         Architecture notes and diagrams
 ```
 
