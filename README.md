@@ -27,8 +27,14 @@ An agentic CAD compliance tool that reads structural specification documents, in
 
 - `DatumListObjects` - prints all scene objects to the Rhino command line
 - `DatumSnapshot` - exports the model to a `.datum.json` file next to the .3dm file
+- `DatumCheck` - opens the Datum panel, which checks the open model against the spec and shows the results in Rhino
 
 The snapshot includes each object's type, name, layer, bounding box, and dimensions. See [docs/snapshot-schema.json](docs/snapshot-schema.json) for the JSON format.
+
+The Datum panel sends the model to the server, runs a compliance check (deterministic or
+agentic), and lists each finding with its clause, status, and the element it concerns. It
+requires the server running (see below); set `DATUM_SERVER_URL` if the server is not at
+`http://localhost:3000`.
 
 ## Extracting Requirements from a Spec
 
@@ -98,6 +104,20 @@ This prints a per-requirement trace and writes `<model>.report.json` and
 `<model>.trace.json`. It requires Ollama running (see prerequisites above); the
 `--requirements` override works here too.
 
+## Running the Server
+
+The `DatumCheck` panel talks to the server over HTTP. Start it with:
+
+```bash
+cd server
+npm run serve
+```
+
+It listens on `http://localhost:3000` (override with the `PORT` environment variable) and
+exposes `POST /check`, which accepts a model snapshot and returns a compliance report (and,
+in agentic mode, the agent trace). See [docs/report-schema.json](docs/report-schema.json)
+for the contract.
+
 ## Project Structure
 
 ```
@@ -110,6 +130,7 @@ server/       TypeScript primary server
   db/         PostgreSQL schema and client
   check/      Deterministic compliance checker
   agent/      Agentic compliance checker
+  http/       HTTP server (plugin round-trip)
 docs/         Architecture notes and diagrams
 ```
 
