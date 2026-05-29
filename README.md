@@ -63,6 +63,27 @@ npm run extract path/to/spec.pdf      # extract requirements from a spec
 The command prints each extracted requirement with its clause and page reference, and
 stores the results in the database.
 
+## Checking a Model
+
+Given a model snapshot (from the `DatumSnapshot` plugin command) and the extracted
+requirements, the checker produces a compliance report. Each finding is marked pass, fail,
+or unmatched, and traces back to both the spec clause and the model element it concerns.
+
+```bash
+cd server
+npm run check path/to/model.datum.json
+```
+
+By default the checker reads requirements from the database. To run against a requirements
+file instead (no database needed), pass `--requirements`:
+
+```bash
+npm run check -- path/to/model.datum.json --requirements path/to/requirements.json
+```
+
+The report is printed as a summary and written to `<model>.report.json` next to the
+snapshot.
+
 ## Project Structure
 
 ```
@@ -73,6 +94,7 @@ server/       TypeScript primary server
   tools/      Deterministic tool layer
   llm/        LLM provider abstraction
   db/         PostgreSQL schema and client
+  check/      Deterministic compliance checker
 docs/         Architecture notes and diagrams
 ```
 

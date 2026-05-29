@@ -1,0 +1,93 @@
+[
+  {
+    "id": "req-2-1",
+    "category": "dimensional",
+    "subject": "exterior wall",
+    "parameter": "thickness",
+    "operator": ">=",
+    "value": 0.3,
+    "unit": "m",
+    "clause": "2.1",
+    "sourcePage": 1,
+    "sourceText": "Exterior walls shall have a minimum thickness of 0.3 m.",
+    "chunkId": ""
+  },
+  {
+    "id": "req-2-2",
+    "category": "dimensional",
+    "subject": "exterior wall",
+    "parameter": "height",
+    "operator": ">=",
+    "value": 3.0,
+    "unit": "m",
+    "clause": "2.2",
+    "sourcePage": 1,
+    "sourceText": "Exterior walls shall have a height of at least 3.0 m.",
+    "chunkId": ""
+  },
+  {
+    "id": "req-2-3",
+    "category": "dimensional",
+    "subject": "interior partition wall",
+    "parameter": "thickness",
+    "operator": "<=",
+    "value": 0.15,
+    "unit": "m",
+    "clause": "2.3",
+    "sourcePage": 1,
+    "sourceText": "Interior partition walls shall not exceed 0.15 m in thickness.",
+    "chunkId": ""
+  },
+  {
+    "id": "req-3-1",
+    "category": "dimensional",
+    "subject": "floor slab",
+    "parameter": "thickness",
+    "operator": ">=",
+    "value": 0.2,
+    "unit": "m",
+    "clause": "3.1",
+    "sourcePage": 1,
+    "sourceText": "Floor slabs shall have a thickness of at least 0.2 m.",
+    "chunkId": ""
+  },
+  {
+    "id": "req-3-2",
+    "category": "dimensional",
+    "subject": "floor-to-ceiling",
+    "parameter": "height",
+    "operator": "between",
+    "value": [2.7, 3.6],
+    "unit": "m",
+    "clause": "3.2",
+    "sourcePage": 1,
+    "sourceText": "The clear floor-to-ceiling height shall be between 2.7 m and 3.6 m.",
+    "chunkId": ""
+  },
+  {
+    "id": "req-4-1",
+    "category": "layout",
+    "subject": "column",
+    "parameter": "spacing",
+    "operator": "<=",
+    "value": 6.0,
+    "unit": "m",
+    "clause": "4.1",
+    "sourcePage": 1,
+    "sourceText": "Structural columns shall be spaced no more than 6.0 m apart, centre to centre.",
+    "chunkId": ""
+  },
+  {
+    "id": "req-4-2",
+    "category": "dimensional",
+    "subject": "column",
+    "parameter": "width",
+    "operator": ">=",
+    "value": 0.4,
+    "unit": "m",
+    "clause": "4.2",
+    "sourcePage": 1,
+    "sourceText": "Each column shall have a minimum cross-sectional width of 0.4 m.",
+    "chunkId": ""
+  }
+]
