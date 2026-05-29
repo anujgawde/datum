@@ -23,9 +23,12 @@ An agentic CAD compliance tool that reads structural specification documents, in
                                       └──────────────────────────────────┘
 ```
 
-## Current Status
+## Plugin Commands
 
-**Phase 0** - Plugin skeleton. The Rhino plugin loads and exposes a `DatumListObjects` command that lists all scene objects.
+- `DatumListObjects` - prints all scene objects to the Rhino command line
+- `DatumSnapshot` - exports the model to a `.datum.json` file next to the .3dm file
+
+The snapshot includes each object's type, name, layer, bounding box, and dimensions. See [docs/snapshot-schema.json](docs/snapshot-schema.json) for the JSON format.
 
 ## Project Structure
 
@@ -36,8 +39,6 @@ server/       TypeScript primary server
   agent/      Agent orchestration service
   tools/      Deterministic tool layer
   llm/        LLM provider abstraction
-dashboard/    Next.js web dashboard (future)
-evals/        Eval suite and ground-truth data (future)
 docs/         Architecture notes and diagrams
 ```
 
@@ -52,7 +53,3 @@ dotnet build
 ```
 
 The output DLL can be loaded into Rhino 8 via `PlugInManager` or by dragging it into the Rhino window.
-
-## License
-
-TBD
