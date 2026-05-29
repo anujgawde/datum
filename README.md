@@ -30,6 +30,39 @@ An agentic CAD compliance tool that reads structural specification documents, in
 
 The snapshot includes each object's type, name, layer, bounding box, and dimensions. See [docs/snapshot-schema.json](docs/snapshot-schema.json) for the JSON format.
 
+## Extracting Requirements from a Spec
+
+The server reads a structural specification PDF and extracts machine-checkable
+requirement objects (subject, parameter, operator, value, unit), each traced back to its
+source clause and page. Requirements and document chunks are stored in PostgreSQL.
+
+### Prerequisites
+
+- [Ollama](https://ollama.com) running locally, with two models pulled:
+  ```bash
+  ollama pull llama3.1
+  ollama pull nomic-embed-text
+  ```
+- PostgreSQL with the `pgvector` extension. A local instance via Docker:
+  ```bash
+  docker run -d --name datum-pg -p 5432:5432 \
+    -e POSTGRES_PASSWORD=datum pgvector/pgvector:pg16
+  ```
+
+Copy `.env.example` to `.env` and adjust the connection string and model names if needed.
+
+### Usage
+
+```bash
+cd server
+npm install
+npm run migrate                       # create tables and the vector index
+npm run extract path/to/spec.pdf      # extract requirements from a spec
+```
+
+The command prints each extracted requirement with its clause and page reference, and
+stores the results in the database.
+
 ## Project Structure
 
 ```
@@ -39,6 +72,7 @@ server/       TypeScript primary server
   agent/      Agent orchestration service
   tools/      Deterministic tool layer
   llm/        LLM provider abstraction
+  db/         PostgreSQL schema and client
 docs/         Architecture notes and diagrams
 ```
 

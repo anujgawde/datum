@@ -1,0 +1,29 @@
+{
+  "name": "datum-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Datum primary server - RAG requirement extraction, agent orchestration, tool layer.",
+  "scripts": {
+    "migrate": "tsx db/migrate.ts",
+    "extract": "tsx rag/cli.ts",
+    "make-fixture": "tsx fixtures/make-pdf.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "pdfjs-dist": "^4.10.38",
+    "pg": "^8.13.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/pdfkit": "^0.13.5",
+    "@types/pg": "^8.11.10",
+    "pdfkit": "^0.15.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
