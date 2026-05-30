@@ -42,6 +42,8 @@ CREATE TABLE IF NOT EXISTS documents (
 );
 CREATE INDEX IF NOT EXISTS documents_project_id_idx ON documents(project_id);
 
+ALTER TABLE documents ADD COLUMN IF NOT EXISTS file_path TEXT;
+
 INSERT INTO projects (id, name) VALUES ('default', 'Default Project')
   ON CONFLICT (id) DO NOTHING;
 INSERT INTO documents (id, project_id, source_file)

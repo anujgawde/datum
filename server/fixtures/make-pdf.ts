@@ -1,5 +1,5 @@
 import { createWriteStream } from "node:fs";
-import { readFile } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import PDFDocument from "pdfkit";
@@ -7,7 +7,9 @@ import PDFDocument from "pdfkit";
 async function makePdf(): Promise<void> {
   const here = dirname(fileURLToPath(import.meta.url));
   const md = await readFile(join(here, "sample-spec.md"), "utf8");
-  const outPath = join(here, "..", "..", "extras", "sample-spec.pdf");
+  const outDir = join(here, "..", "uploads", "sample", "sample");
+  await mkdir(outDir, { recursive: true });
+  const outPath = join(outDir, "sample-spec.pdf");
 
   const doc = new PDFDocument({ margin: 64 });
   const stream = createWriteStream(outPath);
