@@ -10,15 +10,33 @@ import type { Report, Snapshot } from "../tools/types.js";
 interface Args {
   snapshotPath: string;
   requirementsPath: string | null;
+  projectId: string | undefined;
+  documentIds: string[] | undefined;
+  requirementIds: string[] | undefined;
+}
+
+function parseList(value: string | undefined): string[] | undefined {
+  if (!value) return undefined;
+  const items = value.split(",").map((s) => s.trim()).filter((s) => s.length > 0);
+  return items.length > 0 ? items : undefined;
 }
 
 function parseArgs(argv: string[]): Args | null {
   let snapshotPath: string | null = null;
   let requirementsPath: string | null = null;
+  let projectId: string | undefined;
+  let documents: string | undefined;
+  let requirementIdsRaw: string | undefined;
 
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === "--requirements") {
       requirementsPath = argv[++i] ?? null;
+    } else if (argv[i] === "--project") {
+      projectId = argv[++i];
+    } else if (argv[i] === "--documents") {
+      documents = argv[++i];
+    } else if (argv[i] === "--requirement-ids") {
+      requirementIdsRaw = argv[++i];
     } else if (!argv[i]!.startsWith("--")) {
       snapshotPath ??= argv[i]!;
     }
@@ -27,16 +45,28 @@ function parseArgs(argv: string[]): Args | null {
   if (!snapshotPath || (requirementsPath === null && process.argv.includes("--requirements"))) {
     return null;
   }
-  return { snapshotPath, requirementsPath };
+  return {
+    snapshotPath,
+    requirementsPath,
+    projectId,
+    documentIds: parseList(documents),
+    requirementIds: parseList(requirementIdsRaw),
+  };
 }
 
 async function loadSnapshot(path: string): Promise<Snapshot> {
   return JSON.parse(await readFile(path, "utf8")) as Snapshot;
 }
 
-async function getRequirements(path: string | null): Promise<Requirement[]> {
-  if (path) return JSON.parse(await readFile(path, "utf8")) as Requirement[];
-  return loadRequirements();
+async function getRequirements(args: Args): Promise<Requirement[]> {
+  if (args.requirementsPath) {
+    return JSON.parse(await readFile(args.requirementsPath, "utf8")) as Requirement[];
+  }
+  return loadRequirements({
+    projectId: args.projectId,
+    documentIds: args.documentIds,
+    requirementIds: args.requirementIds,
+  });
 }
 
 function reportPath(snapshotPath: string): string {
@@ -63,13 +93,16 @@ function printReport(report: Report): void {
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
   if (!args) {
-    console.error("Usage: npm run check <snapshot.datum.json> [--requirements <file.json>]");
+    console.error(
+      "Usage: npm run check <snapshot.datum.json> [--requirements <file.json>] " +
+        "[--project <id>] [--documents <id,id>] [--requirement-ids <id,id>]"
+    );
     process.exitCode = 1;
     return;
   }
 
   const snapshot = await loadSnapshot(args.snapshotPath);
-  const requirements = await getRequirements(args.requirementsPath);
+  const requirements = await getRequirements(args);
   const report = runCheck(snapshot, requirements);
 
   printReport(report);

@@ -14,6 +14,9 @@ const requestSchema = z.object({
     .passthrough(),
   mode: z.enum(["deterministic", "agentic"]).default("deterministic"),
   requirements: z.array(z.unknown()).optional(),
+  projectId: z.string().optional(),
+  documentIds: z.array(z.string()).optional(),
+  requirementIds: z.array(z.string()).optional(),
 });
 
 export interface CheckResponse {
@@ -27,7 +30,12 @@ export class CheckService {
     const parsed = requestSchema.parse(body);
     const snapshot = parsed.snapshot as unknown as Snapshot;
     const requirements =
-      (parsed.requirements as Requirement[] | undefined) ?? (await loadRequirements());
+      (parsed.requirements as Requirement[] | undefined) ??
+      (await loadRequirements({
+        projectId: parsed.projectId,
+        documentIds: parsed.documentIds,
+        requirementIds: parsed.requirementIds,
+      }));
 
     if (parsed.mode === "agentic") {
       const result = await runAgent(getProvider(), snapshot, requirements);
