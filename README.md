@@ -63,11 +63,14 @@ Copy `.env.example` to `.env` and adjust the connection string and model names i
 cd server
 npm install
 npm run migrate                       # create tables and the vector index
+npm run make-fixture                  # optional: generate extras/sample-spec.pdf
 npm run extract path/to/spec.pdf      # extract requirements from a spec
 ```
 
 The command prints each extracted requirement with its clause and page reference, and
-stores the results in the database.
+stores the results in the database. `make-fixture` writes a sample spec PDF to
+`extras/sample-spec.pdf` (gitignored), so you can try the extractor without sourcing
+your own document first.
 
 ## Checking a Model
 
