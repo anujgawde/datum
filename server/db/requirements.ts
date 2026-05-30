@@ -17,13 +17,31 @@ interface RequirementRow {
   chunk_id: string | null;
 }
 
-export async function loadRequirements(): Promise<Requirement[]> {
+export interface LoadRequirementsOptions {
+  projectId?: string;
+  documentIds?: string[];
+  requirementIds?: string[];
+}
+
+export async function loadRequirements(
+  options: LoadRequirementsOptions = {}
+): Promise<Requirement[]> {
+  const projectId = options.projectId ?? "default";
+  const documentIds = options.documentIds && options.documentIds.length > 0 ? options.documentIds : null;
+  const requirementIds = options.requirementIds && options.requirementIds.length > 0 ? options.requirementIds : null;
+
   const pool = getPool();
   const { rows } = await pool.query<RequirementRow>(
-    `SELECT id, document_id, category, subject, parameter, operator, value_low, value_high,
-            unit, clause, source_page, source_text, chunk_id
-     FROM requirements
-     ORDER BY clause`
+    `SELECT r.id, r.document_id, r.category, r.subject, r.parameter, r.operator,
+            r.value_low, r.value_high, r.unit, r.clause, r.source_page,
+            r.source_text, r.chunk_id
+     FROM requirements r
+     JOIN documents d ON d.id = r.document_id
+     WHERE d.project_id = $1
+       AND ($2::text[] IS NULL OR r.document_id = ANY($2))
+       AND ($3::text[] IS NULL OR r.id = ANY($3))
+     ORDER BY r.clause`,
+    [projectId, documentIds, requirementIds]
   );
 
   return rows.map((row) => ({
