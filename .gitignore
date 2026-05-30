@@ -29,3 +29,6 @@ dist/
 
 # Local extras (claude.md, notes, etc.)
 extras/
+
+# Uploaded specs (user data, stored locally)
+server/uploads/
