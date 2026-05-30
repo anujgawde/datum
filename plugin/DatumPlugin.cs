@@ -1,6 +1,6 @@
-using System;
 using Rhino;
 using Rhino.PlugIns;
+using Rhino.UI;
 
 namespace Datum
 {
@@ -15,6 +15,7 @@ namespace Datum
 
         protected override LoadReturnCode OnLoad(ref string errorMessage)
         {
+            Panels.RegisterPanel(this, typeof(DatumPanel), "Datum", null);
             RhinoApp.WriteLine("Datum plugin loaded successfully.");
             return LoadReturnCode.Success;
         }

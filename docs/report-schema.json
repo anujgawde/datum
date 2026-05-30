@@ -1,0 +1,60 @@
+{
+  "request": {
+    "snapshot": {
+      "version": "1.0",
+      "exportedAt": "2026-05-29T12:00:00Z",
+      "sourceFile": "building.3dm",
+      "units": "Meters",
+      "objects": ["... see snapshot-schema.json ..."]
+    },
+    "mode": "deterministic",
+    "requirements": "optional; when omitted the server loads them from the database"
+  },
+  "response": {
+    "report": {
+      "snapshotFile": "building.3dm",
+      "generatedAt": "2026-05-29T12:00:00Z",
+      "objectCount": 5,
+      "requirementCount": 7,
+      "summary": { "pass": 5, "fail": 2, "unmatched": 1 },
+      "findings": [
+        {
+          "requirementId": "req-2-1",
+          "clause": "2.1",
+          "sourceText": "Exterior walls shall have a minimum thickness of 0.3 m.",
+          "subject": "exterior wall",
+          "parameter": "thickness",
+          "operator": ">=",
+          "expected": 0.3,
+          "unit": "m",
+          "objectId": "11111111-1111-1111-1111-111111111111",
+          "objectName": "Wall-Ext-01",
+          "measured": 0.3,
+          "modelUnit": "Meters",
+          "status": "pass",
+          "detail": "exterior wall thickness = 0.3 m satisfies >= 0.3 m"
+        }
+      ]
+    },
+    "trace": [
+      {
+        "requirementId": "req-2-1",
+        "clause": "2.1",
+        "subject": "exterior wall",
+        "steps": [
+          { "type": "action", "tool": "find_objects", "args": { "subject": "exterior wall" }, "reasoning": "locate matching elements" },
+          { "type": "observation", "tool": "find_objects", "observation": { "matches": ["..."] } },
+          { "type": "finish", "reasoning": "thickness meets minimum", "detail": "pass" }
+        ],
+        "finding": { "...": "same shape as report.findings[]" }
+      }
+    ]
+  },
+  "notes": [
+    "POST /check. mode is 'deterministic' (default) or 'agentic'.",
+    "trace is present only in agentic mode.",
+    "expected is a number, or [low, high] when operator is 'between'.",
+    "status is one of 'pass', 'fail', 'unmatched'.",
+    "detail is the human-readable line; clients can display it without interpreting expected."
+  ]
+}
