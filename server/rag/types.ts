@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export interface Chunk {
   id: string;
+  documentId: string;
   sourceFile: string;
   page: number;
   clause: string | null;
@@ -31,6 +32,7 @@ export type ExtractedRequirement = z.infer<typeof requirementSchema>;
 
 export interface Requirement extends ExtractedRequirement {
   id: string;
+  documentId: string;
   sourcePage: number;
   chunkId: string;
 }

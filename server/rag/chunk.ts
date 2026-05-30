@@ -11,7 +11,7 @@ export function detectClause(text: string): string | null {
   return match ? match[1]! : null;
 }
 
-export function chunkPages(pages: Page[]): Chunk[] {
+export function chunkPages(pages: Page[], documentId = "default"): Chunk[] {
   const chunks: Chunk[] = [];
 
   for (const page of pages) {
@@ -28,6 +28,7 @@ export function chunkPages(pages: Page[]): Chunk[] {
       if (text.length === 0) return;
       chunks.push({
         id: chunkId(page.sourceFile, page.page, chunks.length, text),
+        documentId,
         sourceFile: page.sourceFile,
         page: page.page,
         clause: bufferClause,

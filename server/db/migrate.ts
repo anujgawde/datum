@@ -9,7 +9,7 @@ async function migrate(): Promise<void> {
 
   const pool = getPool();
   await pool.query(sql);
-  console.log("Datum: schema applied (chunks, requirements, pgvector).");
+  console.log("Datum: schema applied (chunks, requirements, projects, documents, pgvector).");
 }
 
 migrate()

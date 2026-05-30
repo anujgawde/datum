@@ -47,6 +47,7 @@ export async function extractRequirements(
         clause: req.clause || chunk.clause || "unknown",
         sourcePage: chunk.page,
         chunkId: chunk.id,
+        documentId: chunk.documentId,
         id: requirementId(chunk.id, req.subject, req.parameter),
       });
     }
