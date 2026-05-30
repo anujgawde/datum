@@ -10,15 +10,16 @@ export async function storeChunks(chunks: EmbeddedChunk[]): Promise<void> {
   const pool = getPool();
   for (const chunk of chunks) {
     await pool.query(
-      `INSERT INTO chunks (id, source_file, page, clause, text, embedding)
-       VALUES ($1, $2, $3, $4, $5, $6)
+      `INSERT INTO chunks (id, document_id, source_file, page, clause, text, embedding)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
        ON CONFLICT (id) DO UPDATE SET
+         document_id = EXCLUDED.document_id,
          source_file = EXCLUDED.source_file,
          page = EXCLUDED.page,
          clause = EXCLUDED.clause,
          text = EXCLUDED.text,
          embedding = EXCLUDED.embedding`,
-      [chunk.id, chunk.sourceFile, chunk.page, chunk.clause, chunk.text, toVector(chunk.embedding)]
+      [chunk.id, chunk.documentId, chunk.sourceFile, chunk.page, chunk.clause, chunk.text, toVector(chunk.embedding)]
     );
   }
 }
@@ -29,12 +30,12 @@ export async function storeRequirements(requirements: Requirement[]): Promise<vo
     const [low, high] = Array.isArray(req.value) ? req.value : [req.value, null];
     await pool.query(
       `INSERT INTO requirements
-         (id, category, subject, parameter, operator, value_low, value_high,
+         (id, document_id, category, subject, parameter, operator, value_low, value_high,
           unit, clause, source_page, source_text, chunk_id)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
        ON CONFLICT (id) DO NOTHING`,
       [
-        req.id, req.category, req.subject, req.parameter, req.operator,
+        req.id, req.documentId, req.category, req.subject, req.parameter, req.operator,
         low, high, req.unit, req.clause, req.sourcePage, req.sourceText, req.chunkId,
       ]
     );
@@ -49,7 +50,7 @@ export async function search(
   const [vector] = await provider.embed([query]);
   const pool = getPool();
   const { rows } = await pool.query(
-    `SELECT id, source_file, page, clause, text
+    `SELECT id, document_id, source_file, page, clause, text
      FROM chunks
      ORDER BY embedding <=> $1
      LIMIT $2`,
@@ -58,6 +59,7 @@ export async function search(
 
   return rows.map((row) => ({
     id: row.id,
+    documentId: row.document_id,
     sourceFile: row.source_file,
     page: row.page,
     clause: row.clause,

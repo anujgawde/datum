@@ -13,11 +13,14 @@ export interface PipelineResult {
   requirements: Requirement[];
 }
 
-export async function runPipeline(pdfPath: string): Promise<PipelineResult> {
+export async function runPipeline(
+  pdfPath: string,
+  documentId = "default"
+): Promise<PipelineResult> {
   const provider = getProvider();
 
   const pages = await ingestPdf(pdfPath);
-  const chunks = chunkPages(pages);
+  const chunks = chunkPages(pages, documentId);
 
   const embedded = await embedChunks(provider, chunks);
   await storeChunks(embedded);

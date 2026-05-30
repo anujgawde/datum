@@ -3,6 +3,7 @@ import type { Requirement } from "../rag/types.js";
 
 interface RequirementRow {
   id: string;
+  document_id: string;
   category: "dimensional" | "layout";
   subject: string;
   parameter: string;
@@ -19,7 +20,7 @@ interface RequirementRow {
 export async function loadRequirements(): Promise<Requirement[]> {
   const pool = getPool();
   const { rows } = await pool.query<RequirementRow>(
-    `SELECT id, category, subject, parameter, operator, value_low, value_high,
+    `SELECT id, document_id, category, subject, parameter, operator, value_low, value_high,
             unit, clause, source_page, source_text, chunk_id
      FROM requirements
      ORDER BY clause`
@@ -27,6 +28,7 @@ export async function loadRequirements(): Promise<Requirement[]> {
 
   return rows.map((row) => ({
     id: row.id,
+    documentId: row.document_id,
     category: row.category,
     subject: row.subject,
     parameter: row.parameter,
